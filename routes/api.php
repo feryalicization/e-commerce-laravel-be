@@ -6,6 +6,8 @@ use L5Swagger\Http\Controllers\SwaggerController;
 use L5Swagger\Http\Controllers\SwaggerAssetController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -33,6 +35,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('categories/{id}', [CategoryController::class, 'show']);
     Route::put('categories/{id}', [CategoryController::class, 'update']);
     Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
+
+    // Cart Routes
+    Route::get('cart', [CartController::class, 'index']);
+    Route::post('cart', [CartController::class, 'store']);
+    Route::put('cart/{id}', [CartController::class, 'update']);
+    Route::delete('cart/{id}', [CartController::class, 'destroy']);
+    Route::delete('cart', [CartController::class, 'clear']);
+
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders', [OrderController::class, 'store']);
+    Route::get('orders/{id}', [OrderController::class, 'show']);
+    Route::put('orders/{id}/status', [OrderController::class, 'updateStatus']);
+    Route::delete('orders/{id}', [OrderController::class, 'destroy']);
 });
 
 

@@ -34,6 +34,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function isAdmin()
+    {
+        return in_array($this->role, ['admin', 'superuser']);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
