@@ -20,9 +20,17 @@ class ProductController extends Controller
  *     @OA\Response(response=401, description="Unauthorized")
  * )
  */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::whereNull('deleted_at')->get(); 
+        $query = Product::whereNull('deleted_at');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $products = $query->get();
+
         return response()->json($products);
     }
 

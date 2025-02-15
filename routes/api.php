@@ -20,12 +20,12 @@ Route::get('/docs/asset/{asset}', [SwaggerAssetController::class, 'index']);
 Route::get('/docs', [SwaggerController::class, 'docs']);
 Route::get('/api/oauth2-callback', [SwaggerController::class, 'oauth2Callback']);
 
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // products
-    Route::get('products', [ProductController::class, 'index']);
     Route::post('products', [ProductController::class, 'store']);
-    Route::get('products/{id}', [ProductController::class, 'show']);
     Route::put('products/{id}', [ProductController::class, 'update']);
     Route::delete('products/{id}', [ProductController::class, 'destroy']);
 
