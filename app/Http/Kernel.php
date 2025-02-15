@@ -6,7 +6,8 @@ return [
         'throttle:api',
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ],
-    'route_middleware' => [ // Changed to a valid array key
+    'route_middleware' => [
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ],
+    'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
 ];
