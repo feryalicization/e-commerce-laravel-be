@@ -22,17 +22,31 @@ class ProductController extends Controller
  */
     public function index(Request $request)
     {
-        $query = Product::whereNull('deleted_at');
+        $query = Product::whereNull('deleted_at')->with('category:id,name'); 
 
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%");
         }
 
-        $products = $query->get();
+        $products = $query->get()->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'category' => $product->category ? $product->category->name : null, 
+                'category_id' => $product->category ? $product->category->id : null, 
+                'image_url' => $product->image_url,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at,
+            ];
+        });
 
         return response()->json($products);
     }
+
 
     public function store(Request $request)
     {
@@ -94,7 +108,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        $product->delete(); 
+        $product->update(['deleted_at' => now()]);
 
         return response()->json(['message' => 'Product deleted successfully']);
     }
