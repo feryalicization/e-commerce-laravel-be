@@ -15,8 +15,28 @@ class CartController extends Controller
 
     public function index()
     {
-        $cartItems = Cart::where('user_id', Auth::id())->whereNull('deleted_at')->with('product')->get();
-        return response()->json($cartItems, 200);
+        $cartItems = Cart::where('user_id', Auth::id())
+        ->whereNull('deleted_at')
+        ->with('product')
+        ->get()
+        ->map(function ($item) {
+            $subtotal = $item->quantity * $item->product->price;
+            $item->subtotal = $subtotal; 
+            return $item;
+        });
+
+    $total = $cartItems->sum('subtotal'); 
+
+    $cartItems = $cartItems->map(function ($item) {
+        $item->subtotal = 'Rp ' . number_format($item->subtotal, 0, ',', '.');
+        return $item;
+    });
+
+    return response()->json([
+        'cart_items' => $cartItems,
+        'total' => 'Rp ' . number_format($total, 0, ',', '.') 
+    ], 200);
+
     }
 
     public function store(Request $request)
