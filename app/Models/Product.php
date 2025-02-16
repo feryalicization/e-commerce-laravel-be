@@ -15,7 +15,8 @@ class Product extends Model
         'price',
         'stock',
         'category_id',
-        'image_url'
+        'image_url',
+        'deleted_at'
     ];
 
     protected $dates = ['deleted_at'];
